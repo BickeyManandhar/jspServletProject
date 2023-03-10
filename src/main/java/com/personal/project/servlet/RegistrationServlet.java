@@ -5,6 +5,8 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.PreparedStatement;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -12,15 +14,19 @@ import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 
+import com.DTO.RegistrationDTO;
+
 
 @WebServlet("/RegistrationServlet")
 public class RegistrationServlet extends HttpServlet {
 	
+	private List<RegistrationDTO> registrationList = new ArrayList<RegistrationDTO>();
 	protected void doGet(HttpServletRequest request, HttpServletResponse response) throws ServletException, IOException {
 		String username = request.getParameter("name");
 		String password = request.getParameter("pass");
 		String email= request.getParameter("email");
 		String contact= request.getParameter("contact");
+		RegistrationDTO registrationDto = new RegistrationDTO(email,username,password,contact);
 		
 		Connection conn = null;
 
@@ -47,7 +53,7 @@ public class RegistrationServlet extends HttpServlet {
 			//System.out.println(modifiedRows);
 
 			if (modifiedRows == 1) {
-				System.out.println("Modification successful.");
+				System.out.println("Inserted successful.");
 			}
 
 		} catch (Exception e) {
@@ -55,16 +61,20 @@ public class RegistrationServlet extends HttpServlet {
 		}
 
 		// Step 5: Closing connection
-		finally {
-			try {
-				conn.close();
-			} catch (SQLException e) {
-				// TODO Auto-generated catch block
-				e.printStackTrace();
-			}
-		}
+				finally {
+					try {
+						conn.close();
+					} catch (SQLException e) {
+						// TODO Auto-generated catch block
+						e.printStackTrace();
+					}
+				}
+		registrationList.add(registrationDto);
+		System.out.println(registrationList);
+		
 		request.setAttribute("regsuccess", "Successfully registered. Now you can login.");
-		request.getRequestDispatcher("login.jsp").forward(request, response);
+		request.setAttribute("signuplist", registrationList);
+		request.getRequestDispatcher("RegistrationList.jsp").forward(request, response);
 	}
 
 	

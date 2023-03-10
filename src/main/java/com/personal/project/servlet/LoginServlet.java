@@ -40,8 +40,8 @@ public class LoginServlet extends HttpServlet {
 				ResultSet rs = ps.executeQuery();
 				if (rs.next()) {
 					System.out.println("Hitting if statement");
-					String uname=rs.getString(1);
-					String uemail=rs.getString(2);
+					String uemail=rs.getString(1);
+					String uname=rs.getString(2);
 					String pass=rs.getString(3);
 					String contactnum=rs.getString(4);
 					
